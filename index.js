@@ -1,8 +1,11 @@
-const { MongoClient } = require("mongodb");
-const ObjectId = require("mongodb").ObjectId;
+/* const { MongoClient } = require("mongodb");
+const ObjectId = require("mongodb").ObjectId; */
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const dbConnect = require("./utility/dbConnect");
+const product = require("./routers/v1/products.route");
+const review = require("./routers/v1/review.route");
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -11,14 +14,13 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ifldk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
-const client = new MongoClient(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+dbConnect();
+
+app.use("/api/v1/product", product);
+app.use("/api/v1/review", review);
 
 async function run() {
-  try {
+  /*  try {
     await client.connect();
     console.log("Connected Database");
     const database = client.db("Chair");
@@ -146,13 +148,21 @@ async function run() {
     });
   } finally {
     //    await client.close();
-  }
+  } */
 }
+
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
+  /* 
   console.log("Server Side is running");
-  res.send("I am ready to go");
+  res.send("I am ready to go"); */
+  res.render("home.ejs", {
+    id: 34,
+    /* user: {
+      name: "test",
+    }, */
+  });
 });
 
 app.listen(port, () => {
